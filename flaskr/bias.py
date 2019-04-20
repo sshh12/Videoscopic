@@ -139,7 +139,7 @@ def _get_leaning(score):
 
 def get_bias(channel_name):
     best_match, score = fuzzproc.extractOne(channel_name, DB.keys())
-    if score < 70:
+    if score < 85:
         return {'name': 'error'}
     data = {
         'name': best_match,
