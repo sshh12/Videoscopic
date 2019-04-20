@@ -1,57 +1,74 @@
+from clarifai.rest import ClarifaiApp
 import numpy as np
 import time
 import dlib
 import cv2
 
-#
-from clarifai.rest import Image as ClImage
-from clarifai.rest import ClarifaiApp
-app = ClarifaiApp(api_key='73ae4c793bcd4d27a0a74e8bcb91a6c8')
-model = app.models.get('celeb-v1.3')
+
+TMP_FN = 'tmp.jpg'
 
 
-face_detector = dlib.get_frontal_face_detector()
-face_predictor = dlib.shape_predictor('shape_predictor_68_face_landmarks.dat')
+class FaceFacts:
+
+    def __init__(self, clarify_apikey):
+        self.clarify_app = ClarifaiApp(api_key=clarify_apikey)
+        self.model = self.clarify_app.models.get('celeb-v1.3')
+        self.face_detector = dlib.get_frontal_face_detector()
+
+    def run(self, image):
+
+        self._save_face_crop(image)
+        people = self._get_people()
+        print(people)
+
+    def _get_people(self):
+
+        people = []
+
+        res = self.model.predict_by_filename(TMP_FN)
+        regions = res['outputs'][0]['data']['regions']
+        for face in regions:
+            main_concept = face['data']['face']['identity']['concepts'][0]
+            name = main_concept['name']
+            conf = main_concept['value']
+            if conf > 0.4:
+                people.append(name.title())
+
+        return people
+
+    def _save_face_crop(self, image):
+
+        grey_img = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+        rects = self.face_detector(grey_img, 1)
+        if len(rects) == 0:
+            return None
+
+        min_x = 9e9
+        min_y = 9e9
+        max_x = 0
+        max_y = 0
+
+        for rect in rects:
+            if rect.area() < 10000:
+                continue
+            left = rect.left() - 100
+            top = rect.top() - 100
+            height = rect.height() + 200
+            width = rect.width() + 200
+            min_x = min(left, min_x)
+            min_y = min(top, min_y)
+            max_x = max(left + width, max_x)
+            max_y = max(top + height, max_y)
+
+        crop = image[min_y:max_y, min_x:max_x]
+        cv2.imwrite(TMP_FN, crop)
 
 
-def extract_faces(full_img_color):
+def b64_to_array(b64data):
+    file_bytes = np.asarray(bytearray(b64data), dtype=np.uint8)
+    return cv2.imdecode(file_bytes, 0)
 
-    faces = None
-
-    full_img = cv2.cvtColor(full_img_color, cv2.COLOR_BGR2GRAY)
-
-    rects = face_detector(full_img, 1)
-    if len(rects) == 0:
-        return faces
-
-    min_x = 99999
-    min_y = 99999
-    max_x = 0
-    max_y = 0
-
-    for rect in rects:
-        if rect.area() < 18000:
-            continue
-        left = rect.left() - 100
-        top = rect.top() - 100
-        height = rect.height() + 200
-        width = rect.width() + 200
-        min_x = min(left, min_x)
-        min_y = min(top, min_y)
-        max_x = max(left + width, max_x)
-        max_y = max(top + height, max_y)
-
-    return full_img_color[min_y:max_y, min_x:max_x]
-
-
-face_crop = extract_faces(cv2.imread('test2.jpg'))
-cv2.imwrite('tmp.jpg', face_crop)
-
-# x['outputs'][0]['data']['regions'][0]['data']['face']['identity']['concepts'][0]['name']
-res = model.predict_by_filename('tmp.jpg')
-regions = res['outputs'][0]['data']['regions']
-for face in regions:
-    main_concept = face['data']['face']['identity']['concepts'][0]
-    name = main_concept['name']
-    conf = main_concept['value']
-    print(name, conf)
+if __name__ == '__main__':
+    ff = FaceFacts('73ae4c793bcd4d27a0a74e8bcb91a6c8')
+    ff.run(cv2.imread('test2.jpg'))
