@@ -73,7 +73,7 @@ class FaceFacts:
         max_y = 0
 
         for rect in rects:
-            if rect.area() < 10000:
+            if rect.area() < 6000:
                 continue
             left = rect.left() - 100
             top = rect.top() - 100
