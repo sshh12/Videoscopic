@@ -1,17 +1,23 @@
-# import os
-
 from flask import Flask
-import argparse
 import json
-import sys
-import nlp
 
-def create_app(test_config=None):
-    # create and configure the app
-    app = Flask(__name__, instance_relative_config=True)
-    @app.route('/nlp')
-    def hello():
-        return nlp.analyze_entities("")
-    return app
 
-    # return response
+from . import nlp
+
+
+app = Flask(__name__, instance_relative_config=True)
+
+
+@app.route('/')
+def index():
+    return 'Hacked Together API beta.v1.6.12'
+
+
+@app.route('/api/text')
+def api_text():
+    return nlp.analyze_entities("")
+
+
+@app.route('/api/image')
+def api_image():
+    return nlp.analyze_entities("")
