@@ -47,7 +47,7 @@ def _get_wiki_info(name, wiki, haspage):
 
     info['url'] = wiki
     info['summary'] = summary
-    info['short_summary'] = summary[:summary.index('.')+1]
+    info['short_summary'] = summary[:summary.index('.', 50)+1]
     info['image_url'] = fuzzproc.extractOne(name + ' Portrait', page.images)[0]
 
     return info
