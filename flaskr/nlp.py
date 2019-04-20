@@ -31,7 +31,7 @@ def analyze_entities(text, encoding='UTF32'):
                 data.append(_get_wiki_info(word['name'], word['metadata']['wikipedia_url'], True))
     # print(data)
 
-    return json.dumps(data, indent=2)
+    return data
 
 
 def _get_wiki_info(name, wiki, haspage):
@@ -49,5 +49,5 @@ def _get_wiki_info(name, wiki, haspage):
     info['summary'] = summary
     info['short_summary'] = summary[:summary.index('.')+1]
     info['image_url'] = fuzzproc.extractOne(name + ' Portrait', page.images)[0]
-    
+
     return info

@@ -4,6 +4,7 @@ import cv2
 
 from . import nlp
 from . import face_lookup
+from . import bias
 
 
 BUFFER_FN = 'buffer.jpg'
@@ -19,7 +20,14 @@ def index():
 
 @app.route('/api/text', methods=['POST'])
 def api_text():
-    return 'stuff'
+    text = request.form['text']
+    return jsonify(nlp.analyze_entities(text))
+
+
+@app.route('/api/bias', methods=['POST'])
+def api_bias():
+    text = request.form['text']
+    return jsonify(bias.get_bias(text))
 
 
 @app.route('/api/image', methods=['POST'])

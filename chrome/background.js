@@ -64,6 +64,8 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         console.log("text dada", data);
         sendResponse(data);
     })
+
+    return true;
 });
 
 
@@ -75,9 +77,11 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 
     $.ajax({"url": "http://e44bd8fa.ngrok.io/api/bias", method: "POST", data: {"text": request.name}})
         .done(function (data) {
-            console.log("text dada", data);
+            console.log("bias dada", data);
             sendResponse(data);
         })
+
+    return true;
 });
 
 
