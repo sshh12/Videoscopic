@@ -5,8 +5,6 @@ import argparse
 import json
 import sys
 
-
-
 import googleapiclient.discovery
 
 def create_app(test_config=None):
