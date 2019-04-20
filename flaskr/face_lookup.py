@@ -19,7 +19,9 @@ class FaceFacts:
 
     def run(self, image):
 
-        self._save_face_crop(image)
+        if not self._save_face_crop(image)
+            return []
+            
         people = self._get_people()
 
         data = []
@@ -84,8 +86,12 @@ class FaceFacts:
             max_x = max(left + width, max_x)
             max_y = max(top + height, max_y)
 
+        if max_x == 0 or max_y == 0:
+            return False
+
         crop = image[min_y:max_y, min_x:max_x]
         cv2.imwrite(TMP_FN, crop)
+        return True
 
 
 def b64_to_array(b64data):
