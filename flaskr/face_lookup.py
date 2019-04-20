@@ -92,6 +92,7 @@ def b64_to_array(b64data):
     file_bytes = np.asarray(bytearray(b64data), dtype=np.uint8)
     return cv2.imdecode(file_bytes, 0)
 
+
 if __name__ == '__main__':
     ff = FaceFacts('73ae4c793bcd4d27a0a74e8bcb91a6c8')
     ff.run(cv2.imread('test2.jpg'))

@@ -4,3 +4,6 @@ googleapiclient
 opencv-python
 dlib
 google-api-python-client
+fuzzywuzzy
+wikipedia
+clarifai
