@@ -18,7 +18,10 @@ function onPaused() {
     $("#container > h1 > yt-formatted-string").text("paused");
 
     chrome.runtime.sendMessage("screenshot", function(response) {
-        console.log(response);
+
+        // ADD DISPLAY HERE
+
+        console.log("resp", response);
     });
 
 }

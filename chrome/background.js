@@ -26,11 +26,10 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 
     console.log("sent from tab.id=" + sender.tab.id);
 
-    sendResponse("sent from tab.id=" + sender.tab.id);
+    // sendResponse("sent from tab.id=" + sender.tab.id);
     setTimeout(function () {
     chrome.tabs.captureVisibleTab(null, {format: 'png', quality: 100}, function (dataURI) {
         // send to server
-
         dataURI = dataURI.replace(/^data:image\/(png|jpg);base64,/, "");
         var blob = base64ToBlob(dataURI, "img/png");
         var formData = new FormData();
@@ -38,10 +37,11 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 
             $.ajax({"url": "http://e44bd8fa.ngrok.io/api/image", method: "POST", contentType: false, processData: false, data: formData})
                 .done(function (data) {
-                    console.log(data)
+                    console.log("dada", data);
+                    sendResponse(data);
                 })
         });
-    }, 1500)
+    }, 1500);
 
-
+    return true;
 });
