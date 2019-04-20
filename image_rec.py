@@ -1,4 +1,6 @@
 from clarifai.rest import ClarifaiApp
+from fuzzywuzzy import process as fuzzproc
+import wikipedia
 import numpy as np
 import time
 import dlib
@@ -19,7 +21,28 @@ class FaceFacts:
 
         self._save_face_crop(image)
         people = self._get_people()
-        print(people)
+
+        data = []
+        for name in people:
+            data.append(self._get_person_info(name))
+
+        return data
+
+    def _get_person_info(self, name):
+
+        info = {}
+        info['name'] = name
+
+        page_name = wikipedia.search(name)[0]
+        page = wikipedia.page(page_name)
+        summary = page.summary
+
+        info['url'] = 'https://en.wikipedia.org/wiki/{}'.format(page_name.replace(' ', '_'))
+        info['summary'] = summary
+        info['short_summary'] = summary[:summary.index('.')+1]
+        info['image_url'] = fuzzproc.extractOne(name, page.images)[0]
+
+        return info
 
     def _get_people(self):
 
