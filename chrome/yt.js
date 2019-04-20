@@ -81,7 +81,7 @@ function showWindow(onScreenData, contentData) {
   }
   .ht-img {
     height: 100px;
-    max-width: 100px;
+    width: 120px;
   }
   .ht-list {
     list-style-type: none;
