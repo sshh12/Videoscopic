@@ -20,13 +20,14 @@ def index():
 
 @app.route('/api/text', methods=['POST'])
 def api_text():
-    print(request.form['text'])
-    return 'stuff'
+    text = request.form['text']
+    return jsonify(nlp.analyze_entities(text))
 
 
-@app.route('/api/bias', methods=['GET'])
+@app.route('/api/bias', methods=['POST'])
 def api_bias():
-    return jsonify(bias.get_bias('NBC News'))
+    text = request.form['text']
+    return jsonify(bias.get_bias(text))
 
 
 @app.route('/api/image', methods=['POST'])
