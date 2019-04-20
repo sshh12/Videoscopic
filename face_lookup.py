@@ -40,7 +40,7 @@ class FaceFacts:
         info['url'] = 'https://en.wikipedia.org/wiki/{}'.format(page_name.replace(' ', '_'))
         info['summary'] = summary
         info['short_summary'] = summary[:summary.index('.')+1]
-        info['image_url'] = fuzzproc.extractOne(name, page.images)[0]
+        info['image_url'] = fuzzproc.extractOne(name + ' Portrait', page.images)[0]
 
         return info
 
