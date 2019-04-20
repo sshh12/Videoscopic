@@ -24,7 +24,7 @@ function showWindow(onScreenData, contentData) {
     screenHTML += `
     <li class='ht-list-item'>
       <div>
-        <a href='${person.url}'><img class='ht-img' src='${person.image_url}' /></a>
+        <a target="_blank" href='${person.url}'><img class='ht-img' src='${person.image_url}' /></a>
       </div>
       <div class='ht-img-desc'>
         <h4><b>${person.name}</b></h4>
@@ -38,7 +38,7 @@ function showWindow(onScreenData, contentData) {
     contentHTML += `
     <li class='ht-list-item'>
       <div>
-        <a href='${person.url}'><img class='ht-img' src='${person.image_url}' /></a>
+        <a target="_blank" href='${person.url}'><img class='ht-img' src='${person.image_url}' /></a>
       </div>
       <div class='ht-img-desc'>
         <h4><b>${person.name}</b></h4>
@@ -56,6 +56,7 @@ function showWindow(onScreenData, contentData) {
   	height: ${parentElem.clientHeight - 10}px;
   	color: #E3E3E3;
     font-family: 'Roboto', sans-serif;
+    overflow: scroll !important;
   }
   .ht-box * {
     font-weight: normal !important;
@@ -67,7 +68,6 @@ function showWindow(onScreenData, contentData) {
   .ht-info {
   	margin-left: 10px !important;
   	margin-top: 10px !important;
-    overflow-x: wrap;
     overflow-y: scroll;
     display: flex;
   }
@@ -76,10 +76,12 @@ function showWindow(onScreenData, contentData) {
     float: left;
   }
   .ht-right {
+    width: ${parentElem.clientWidth / 2 - 1}px;
     float: left;
   }
   .ht-img {
     height: 100px;
+    max-width: 100px;
   }
   .ht-list {
     list-style-type: none;
