@@ -19,9 +19,9 @@ class FaceFacts:
 
     def run(self, image):
 
-        if not self._save_face_crop(image)
+        if not self._save_face_crop(image):
             return []
-            
+
         people = self._get_people()
 
         data = []
