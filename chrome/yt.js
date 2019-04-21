@@ -3,6 +3,7 @@ let delayPassed = false;
 let textJson = null;
 let biasJson = null;
 let title = $("#container > h1 > yt-formatted-string").text();
+let prevURL = window.location.href;
 
 setTimeout(function () {
     delayPassed = true;
@@ -176,6 +177,13 @@ setInterval(function () {
     // was just unpaused
     } else if (!$("#movie_player").hasClass("paused-mode") && currentlyPaused) {
         onPlayed();
+    }
+
+    if(window.location.href != prevURL) {
+      biasJson = null;
+      textJson = null;
+      prevURL = window.location.href;
+      setTimeout(gatherData, 1000);
     }
 
 }, 100);
