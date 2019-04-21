@@ -2,6 +2,7 @@ let currentlyPaused = false;
 let delayPassed = false;
 let textJson = null;
 let biasJson = null;
+let title = $("#container > h1 > yt-formatted-string").text();
 
 setTimeout(function () {
     delayPassed = true;
@@ -100,9 +101,14 @@ function showWindow(onScreenData, contentData, biasData) {
     float: left;
     padding-left: 10px;
   }
+  .ht-logo {
+    height: 20px;
+    display: inline !important;
+  }
+  
   </style>
   <div class="branding-img-container ht-box">
-     <h1 class="ht-header">Hacked Together</h1>
+     <h1 class="ht-header"><img class="ht-logo" src="https://i.imgur.com/7PRyWVq.png" /> Videoscopic</h1>
      ${biasHTML}
      <div class="ht-info">
         <div class="ht-left">
@@ -134,15 +140,20 @@ function onPaused() {
 
     console.log("SIR");
 
-
-    $("#container > h1 > yt-formatted-string").text("paused");
+    title = $("#container > h1 > yt-formatted-string").text()
+    $("#container > h1 > yt-formatted-string").text("LOADING: "+ $("#container > h1 > yt-formatted-string").text());
     chrome.runtime.sendMessage({type: "screenshot"}, function(response) {
 
         // response is picture data
         let intId = setInterval(function () {
             if(textJson !== null && biasJson !== null){
                 clearInterval(intId);
-                showWindow(response, textJson, biasJson);
+                $("#container > h1 > yt-formatted-string").text(title);
+
+                // if still paused
+                if($("#movie_player").hasClass("paused-mode")){
+                    showWindow(response, textJson, biasJson);
+                }
             }
         }, 50)
     });
@@ -152,7 +163,6 @@ function onPaused() {
 
 function onPlayed() {
     // alert("unpaused");
-    $("#container > h1 > yt-formatted-string").text("unpaused");
     currentlyPaused = false;
 
     closeWindow();
@@ -206,6 +216,8 @@ function gatherData() {
 
     });
 
+    title = $("#container > h1 > yt-formatted-string").text();
+
 }
 
-setTimeout(gatherData, 3500);
+setTimeout(gatherData, 4000);
